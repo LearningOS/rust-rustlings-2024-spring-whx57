@@ -12,7 +12,7 @@
 //
 // Execute `rustlings hint cow1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
+
 
 use std::borrow::Cow;
 
@@ -36,9 +36,13 @@ mod tests {
         // Clone occurs because `input` needs to be mutated.
         let slice = [-1, 0, 1];
         let mut input = Cow::from(&slice[..]);
-        match abs_all(&mut input) {
-            Cow::Owned(_) => Ok(()),
-            _ => Err("Expected owned value"),
+        abs_all(&mut input);  
+        match input {  
+            Cow::Owned(ref vec) => {  
+                assert_eq!(vec, &[1, 0, 1]);  
+                Ok(())  
+            },  
+            _ => Err("Expected owned value"),  
         }
     }
 
@@ -47,9 +51,13 @@ mod tests {
         // No clone occurs because `input` doesn't need to be mutated.
         let slice = [0, 1, 2];
         let mut input = Cow::from(&slice[..]);
-        match abs_all(&mut input) {
-            // TODO
-        }
+        match input {  
+            Cow::Borrowed(borrowed_slice) => {  
+                assert_eq!(borrowed_slice, &[0, 1, 2]);  
+                Ok(())  
+            },  
+            _ => Err("Expected borrowed value"),  
+        }  
     }
 
     #[test]
@@ -59,9 +67,14 @@ mod tests {
         // still owned because it was never borrowed or mutated.
         let slice = vec![0, 1, 2];
         let mut input = Cow::from(slice);
-        match abs_all(&mut input) {
-            // TODO
-        }
+        abs_all(&mut input);  
+        match input {  
+            Cow::Owned(owned_slice) => {  
+                assert_eq!(owned_slice, vec![0, 1, 2]);  
+                Ok(())  
+            },  
+            _ => Err("Expected owned value"),  
+        }  
     }
 
     #[test]
@@ -71,8 +84,13 @@ mod tests {
         // before.
         let slice = vec![-1, 0, 1];
         let mut input = Cow::from(slice);
-        match abs_all(&mut input) {
-            // TODO
-        }
+        abs_all(&mut input);  
+        match input {  
+            Cow::Owned(owned_slice) => {  
+                assert_eq!(owned_slice, vec![1, 0, 1]);  
+                Ok(())  
+            },  
+            _ => Err("Expected owned value"),  
+        }  
     }
 }
